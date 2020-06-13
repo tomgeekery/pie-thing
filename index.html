@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pie Chart</title>
+
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+      defer
+    ></script>
+  </head>
+  <body class="flex justify-center h-screen items-center">
+    <div x-data="getSections()">
+      <div class="mb-8">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 200 200"
+          class="overflow-visible"
+          style="width: 24rem; height: 24rem;"
+        >
+          <circle
+            cx="100"
+            cy="100"
+            r="100"
+            fill="none"
+            stroke-width="2"
+            class="stroke-current text-black"
+          ></circle>
+
+          <g id="circle-lines"></g>
+        </svg>
+      </div>
+      <div class="text-center mb-8">
+        <input
+          class="border p-2 text-center text-6xl w-32"
+          type="number"
+          id="sections"
+          min="1"
+          max="99"
+          x-model="sections"
+          @change="updateSections"
+        />
+      </div>
+    </div>
+
+    <script>
+      function getSections() {
+        return {
+          sections: 1,
+
+          updateSections(event) {
+            const circleLines = document.querySelector("#circle-lines");
+            const value = event.target.value;
+            const degrees = 360 / value;
+
+            let startingDegree = 0;
+
+            // Clear out existing lines.
+            circleLines.innerHTML = "";
+
+            if (value > 1 && value < 100) {
+              for (let i = 0; i < value; i++) {
+                const radians = (startingDegree * Math.PI) / 180;
+                const x = Math.cos(radians) * 100 + 100;
+                const y = Math.sin(radians) * 100 + 100;
+
+                // Add line to SVG.
+                circleLines.innerHTML += `<line x1="100" y1="100" x2="${x}" y2="${y}" stroke="#000" stroke-width="2"></line>`;
+
+                startingDegree += degrees;
+              }
+            }
+          },
+        };
+      }
+    </script>
+  </body>
+</html>

@@ -15,6 +15,20 @@
       src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
       defer
     ></script>
+
+    <style>
+      @keyframes draw {
+        from {
+          stroke-dashoffset: 1;
+        }
+      }
+
+      line {
+        --delay: calc(0.5s + (var(--i) * 0.05s));
+        stroke-dasharray: 1 1;
+        animation: draw var(--delay);
+      }
+    </style>
   </head>
   <body class="flex justify-center h-screen items-center">
     <div x-data="getSections()">
@@ -22,7 +36,7 @@
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 200 200"
-          class="overflow-visible"
+          class="overflow-visible transform -rotate-90"
           style="width: 24rem; height: 24rem;"
         >
           <circle
@@ -72,7 +86,7 @@
                 const y = Math.sin(radians) * 100 + 100;
 
                 // Add line to SVG.
-                circleLines.innerHTML += `<line x1="100" y1="100" x2="${x}" y2="${y}" stroke="#000" stroke-width="2"></line>`;
+                circleLines.innerHTML += `<line x1="100" y1="100" x2="${x}" y2="${y}" stroke="#000" stroke-width="2" pathLength="1" style="--i: ${i}"></line>`;
 
                 startingDegree += degrees;
               }
